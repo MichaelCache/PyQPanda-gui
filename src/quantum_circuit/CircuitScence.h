@@ -7,7 +7,7 @@
 #include <QWidget>
 
 #include "quantum_gates/BaseGate.h"
-#include "gate_factory/BaseFactory.h"
+#include "quantum_gates/GateFactory.h"
 
 class CircuitScence : public QGraphicsScene
 {
@@ -19,7 +19,8 @@ public:
 signals:
 
 private:
-  BaseGate *m_gate;
+  // BaseGate *m_gate;
+  GateFactory *m_gate_factory;
   // QList < BaseFa
 };
 
