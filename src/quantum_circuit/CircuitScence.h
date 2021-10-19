@@ -20,7 +20,7 @@ signals:
 
 private:
   BaseGate *m_gate;
-  QList < BaseFa
+  // QList < BaseFa
 };
 
 #endif // CIRCUITASSEMBLEWIDGET_H
