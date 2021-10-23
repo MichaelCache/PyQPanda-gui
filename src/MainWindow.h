@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QWidget>
 
-#include "quantum_circuit/CircuitScence.h"
+#include "quantum_circuit/CircuitScene.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,6 +20,6 @@ private:
 
   QWidget *m_main_widget;
   QGraphicsView *m_view;
-  CircuitScence *m_cirruit_scence;
+  CircuitScene *m_cirruit_scence;
 };
 #endif // MAINWINDOW_H

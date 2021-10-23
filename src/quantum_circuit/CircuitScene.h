@@ -9,19 +9,22 @@
 #include "quantum_gates/BaseGate.h"
 #include "quantum_gates/GateFactory.h"
 
-class CircuitScence : public QGraphicsScene
-{
+class GateFactory;
+
+class CircuitScene : public QGraphicsScene {
   Q_OBJECT
-public:
-  explicit CircuitScence(QWidget *parent = nullptr);
-  virtual ~CircuitScence();
+ public:
+  explicit CircuitScene(QWidget *parent = nullptr);
+  virtual ~CircuitScene();
 
-signals:
+ signals:
+ protected:
+  //  void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
 
-private:
+ private:
   // BaseGate *m_gate;
   GateFactory *m_gate_factory;
   // QList < BaseFa
 };
 
-#endif // CIRCUITASSEMBLEWIDGET_H
+#endif  // CIRCUITASSEMBLEWIDGET_H

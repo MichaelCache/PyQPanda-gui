@@ -1,10 +1,6 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file alias="hgate.png">img/hgate.png</file>
-    <!-- <file>images/cut.png</file> -->
-    <!-- <file>images/new.png</file> -->
-    <!-- <file>images/open.png</file> -->
-    <!-- <file>images/paste.png</file> -->
-    <!-- <file>images/save.png</file> -->
-</qresource>
+<RCC>
+    <qresource prefix="/">
+        <file alias="Hgate.png">img/Hgate.png</file>
+        <file alias="Tgate.png">img/Tgate.png</file>
+    </qresource>
 </RCC>
