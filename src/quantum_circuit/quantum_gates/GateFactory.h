@@ -26,5 +26,4 @@ class GateFactory : public QObject, public QGraphicsItem {
 
   QString m_gate_type;
   QPixmap m_gate_img;
-  CircuitScene *m_scence;
 };

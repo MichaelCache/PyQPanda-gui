@@ -18,13 +18,15 @@ class BaseGate : public QObject, public QGraphicsItem {
  protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
              QWidget *widget) override;
-  //  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-  //  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
  private:
   QPixmap m_gate_img;
   QString m_name;
+  QWidget *m_property_widget;
+  QGraphicsProxyWidget *m_item;
 };
 
 #endif  // QUGATE_H
