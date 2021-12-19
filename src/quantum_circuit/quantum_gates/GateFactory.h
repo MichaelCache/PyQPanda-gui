@@ -6,24 +6,27 @@
 
 #include "../CircuitScene.h"
 #include "BaseGate.h"
+#include "GateRectF.h"
+#include "GateFont.h"
 
 class CircuitScene;
 
-class GateFactory : public QObject, public QGraphicsItem {
- public:
-  explicit GateFactory(const QString &gate, QObject *parent = nullptr);
+/**
+ * @brief automatic generate BaseGate
+ */
+class GateFactory : public QObject, public QGraphicsItem
+{
+public:
+  explicit GateFactory(const QString &gate, qreal x, qreal y, QObject *parent = nullptr);
   virtual ~GateFactory();
   QRectF boundingRect() const;
-  BaseGate *createGate();
 
- protected:
+protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
              QWidget *widget) override;
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-  //  void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-  //  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-  // void hoverEn
 
   QString m_gate_type;
-  QPixmap m_gate_img;
+  GateRectF m_gate_rect;
+  static GateFont m_gate_font;
 };

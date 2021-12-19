@@ -9,11 +9,11 @@ cd build
 cmake ..
 cmake --build .
 ```
-if Qt is installed in stander dir, run
+if Qt is installed in standard dir, run
 ```bash
 mkdir build
 cd build
-cmake .. -DQT_DIR="your_qt_root_dir/5.12.11/gcc_64"
+cmake .. -DQT_DIR="your_qt_root_dir/5.12.11/"
 cmake --build .
 ```
 

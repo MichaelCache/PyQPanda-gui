@@ -1,6 +1,4 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="Hgate.png">img/Hgate.png</file>
-        <file alias="Tgate.png">img/Tgate.png</file>
     </qresource>
 </RCC>
