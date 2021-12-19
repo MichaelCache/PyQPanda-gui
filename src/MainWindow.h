@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QWidget>
@@ -22,4 +21,3 @@ private:
   QGraphicsView *m_view;
   CircuitScene *m_cirruit_scence;
 };
-#endif // MAINWINDOW_H

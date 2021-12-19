@@ -1,5 +1,4 @@
-#ifndef CIRCUITASSEMBLEWIDGET_H
-#define CIRCUITASSEMBLEWIDGET_H
+#pragma once
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
@@ -11,20 +10,17 @@
 
 class GateFactory;
 
-class CircuitScene : public QGraphicsScene {
+class CircuitScene : public QGraphicsScene
+{
   Q_OBJECT
- public:
+public:
   explicit CircuitScene(QWidget *parent = nullptr);
   virtual ~CircuitScene();
 
- signals:
- protected:
-  //  void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
+signals:
+protected:
 
- private:
-  // BaseGate *m_gate;
+private:
   GateFactory *m_gate_factory;
-  // QList < BaseFa
 };
 
-#endif  // CIRCUITASSEMBLEWIDGET_H
