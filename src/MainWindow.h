@@ -18,6 +18,6 @@ private:
   void initUi();
 
   QWidget *m_main_widget;
-  QGraphicsView *m_view;
-  CircuitScene *m_cirruit_scence;
+  QGraphicsView *m_circute_view;
+  CircuitScene *m_circuit_scence;
 };
