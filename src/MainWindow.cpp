@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
   // max main window
   showMaximized();
   setStyle(QStyleFactory::create("fusion"));
-  resize(QDesktopWidget().availableGeometry(this).size());
 
   createComponent();
   initUi();
@@ -28,7 +27,7 @@ void MainWindow::createComponent()
   m_circute_view->setScene(m_circuit_scence);
   m_circute_view->setCacheMode(QGraphicsView::CacheBackground);
 
-  QRect rcontent = m_circute_view->contentsRect();
+  QRect& rcontent = m_circute_view->contentsRect();
   m_circute_view->setSceneRect(0, 0, rcontent.width(), rcontent.height());
 
   QLabel m_coord;

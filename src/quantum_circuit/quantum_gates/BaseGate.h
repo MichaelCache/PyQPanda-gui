@@ -2,8 +2,10 @@
 #define QUGATE_H
 
 #include <QGraphicsRectItem>
+#include <QGraphicsTextItem>
 #include <QObject>
 #include <QWidget>
+#include <QMenu>
 
 #include "GateFont.h"
 #include "GateRectF.h"
@@ -19,8 +21,11 @@ public:
   virtual ~BaseGate();
   QRectF boundingRect() const;
 
-public slots:
-  // void test();
+private slots:
+  void setDagger();
+
+  // signals:
+  // void deleteSelf();
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -31,9 +36,13 @@ protected:
   void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
 private:
+  void initPropertyMenu();
   QString m_name;              // also will be gate name drawed in gate rectanguler block
   GateRectF m_gate_rect;       // gate rectanguler block with color
   static GateFont m_gate_font; // gate name font type and color in gate rectanguler block
+  QMenu m_property_menu;
+  QString m_dagger{0x2020}; // unicode dagger
+  bool m_is_dagger{false};
 };
 
 #endif // QUGATE_H

@@ -1,7 +1,5 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# set(TS_FILES ${TRANS_DIR}/qpanda_gui_zh_CN.ts)
-
 file(GLOB_RECURSE PROJECT_SOURCES *.cpp *.h)
 
 add_executable(QPanda_gui ${PROJECT_SOURCES} ${TRANS_FILE} ${RESOURCE_FILE})
