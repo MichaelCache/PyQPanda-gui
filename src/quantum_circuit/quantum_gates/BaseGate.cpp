@@ -17,9 +17,6 @@ BaseGate::BaseGate(const QString &name, const QRectF &gate_rect, QObject *parent
       m_gate_rect(gate_rect)
 {
   setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
-  // addToGroup(&m_gate_rect);
-  // setFont(m_gate_font);
-  // setPlainText(m_name);
   initPropertyMenu();
 }
 
@@ -31,6 +28,7 @@ void BaseGate::initPropertyMenu()
   QAction *del_gate = m_property_menu.addAction("Delete");
 
   QObject::connect(dagger, SIGNAL(triggered()), this, SLOT(setDagger()));
+  QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
 }
 
 void BaseGate::setDagger()
@@ -39,9 +37,10 @@ void BaseGate::setDagger()
   update();
 }
 
-// void BaseGate::deleteSelf()
-// {
-// }
+void BaseGate::deleteSelf()
+{
+  scene()->removeItem(this);
+}
 
 QRectF BaseGate::boundingRect() const
 {

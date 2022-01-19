@@ -23,9 +23,7 @@ public:
 
 private slots:
   void setDagger();
-
-  // signals:
-  // void deleteSelf();
+  void deleteSelf();
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
