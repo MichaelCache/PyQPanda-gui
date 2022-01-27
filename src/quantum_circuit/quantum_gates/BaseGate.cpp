@@ -39,7 +39,22 @@ void BaseGate::setDagger()
 
 void BaseGate::deleteSelf()
 {
-  scene()->removeItem(this);
+  if (scene())
+  {
+    scene()->removeItem(this);
+  }
+}
+
+void BaseGate::isInValid(bool valid, QPointF top_left)
+{
+  if (valid)
+  {
+    m_gate_rect.moveTopLeft(top_left);
+  }
+  else
+  {
+    deleteSelf();
+  }
 }
 
 QRectF BaseGate::boundingRect() const
@@ -58,14 +73,21 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+  emit showValidBox(m_gate_rect);
   QGraphicsItem::mouseMoveEvent(event);
 }
+
+// void BaseGate::mousePressEvent(QGraphicsSceneMouseEvent *event){
+//   QGraphicsItem::mousePressEvent(event);
+// }
 
 void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsItem::mouseReleaseEvent(event);
   ungrabMouse();
   setSelected(false);
+  emit hideValidBox();
+  emit checkInValidBox(m_gate_rect);
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

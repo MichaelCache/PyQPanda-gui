@@ -39,8 +39,7 @@ void GateFactory::mousePressEvent(QGraphicsSceneMouseEvent *event)
   if (event->button() == Qt::LeftButton)
   {
     BaseGate *gate = new BaseGate(m_gate_type, m_gate_rect);
-    scene()->addItem(gate);
-    // connect(gate, SIGNAL(BaseGate::deleteSelf(BaseGate *)), scene(), SLOT(QGraphicsScene::removeItem(QGraphicsItem *)));
+    static_cast<CircuitScene*>(scene())->addGate(gate);
     QGraphicsItem::mousePressEvent(event);
     // gate get mouse fouce, gate factory lose mouse
     ungrabMouse();

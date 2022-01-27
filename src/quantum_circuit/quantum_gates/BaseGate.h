@@ -25,10 +25,19 @@ private slots:
   void setDagger();
   void deleteSelf();
 
+public slots:
+  void isInValid(bool, QPointF);
+
+signals:
+  void showValidBox(QRectF);
+  void hideValidBox();
+  void checkInValidBox(QRectF);
+
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
              QWidget *widget) override;
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  // void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
   void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
