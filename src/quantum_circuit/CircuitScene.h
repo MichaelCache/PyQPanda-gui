@@ -22,6 +22,8 @@ public:
   void addGate(BaseGate*);
   void addFrameLine(FrameLine*);
 
+  void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
 private:
   GateFactory *m_gate_factory;
   QSet<BaseGate*> m_gate_group;

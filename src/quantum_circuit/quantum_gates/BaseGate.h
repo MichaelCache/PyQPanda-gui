@@ -26,12 +26,13 @@ private slots:
   void deleteSelf();
 
 public slots:
-  void isInValid(bool, QPointF);
+  void isInValidPos(bool, QPointF);
 
 signals:
-  void showValidBox(QRectF);
-  void hideValidBox();
-  void checkInValidBox(QRectF);
+  void showValidPos(QRectF);
+  void hideValidPos();
+  void checkValidPos(QRectF);
+  void occupyPos(bool);
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

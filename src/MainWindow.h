@@ -1,9 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
-#include <QWidget>
 
-#include "quantum_circuit/CircuitScene.h"
+#include "CentralWidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -14,10 +13,5 @@ public:
   ~MainWindow();
 
 private:
-  void createComponent();
-  void initUi();
-
-  QWidget *m_main_widget;
-  QGraphicsView *m_circute_view;
-  CircuitScene *m_circuit_scence;
+  CentralWidget *m_main_widget;
 };

@@ -16,16 +16,18 @@ public:
     virtual ~FrameLine();
 
 signals:
-   void inValidPos(bool, QPointF);
+   void isInValidPos(bool, QPointF);
 
 public slots:
     void showValidPos(QRectF rect);
     void hideValidPos();
     void checkValidPos(QRectF rect);
+    void occupyPos(bool);
 
 private:
     QGraphicsTextItem *m_line_label;
     QGraphicsLineItem *m_frame_line;
     QGraphicsRectItem *m_virtual_gate;
     QPointF m_valid_pos;
+    double m_step{30};
 };

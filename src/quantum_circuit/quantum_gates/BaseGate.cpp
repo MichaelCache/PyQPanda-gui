@@ -7,7 +7,6 @@
 #include <QPainter>
 #include <QMenu>
 
-// GateRectF BaseGate::m_gate_rect;
 GateFont BaseGate::m_gate_font;
 
 BaseGate::BaseGate(const QString &name, const QRectF &gate_rect, QObject *parent)
@@ -39,20 +38,21 @@ void BaseGate::setDagger()
 
 void BaseGate::deleteSelf()
 {
-  if (scene())
-  {
-    scene()->removeItem(this);
-  }
+  scene()->removeItem(this);
+  delete this;
 }
 
-void BaseGate::isInValid(bool valid, QPointF top_left)
+void BaseGate::isInValidPos(bool valid, QPointF pos)
 {
   if (valid)
   {
-    m_gate_rect.moveTopLeft(top_left);
+    setPos(pos);
+    update();
+    emit occupyPos(true);
   }
   else
   {
+    emit occupyPos(false);
     deleteSelf();
   }
 }
@@ -73,7 +73,7 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-  emit showValidBox(m_gate_rect);
+  emit showValidPos(m_gate_rect);
   QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -86,8 +86,12 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   QGraphicsItem::mouseReleaseEvent(event);
   ungrabMouse();
   setSelected(false);
-  emit hideValidBox();
-  emit checkInValidBox(m_gate_rect);
+  emit hideValidPos();
+
+  QRectF cur_rect(m_gate_rect);
+  cur_rect.moveTopLeft(scenePos());
+  qDebug() << QString("gatePos: %1:%2").arg(cur_rect.x()).arg(cur_rect.y());
+  emit checkValidPos(cur_rect);
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
