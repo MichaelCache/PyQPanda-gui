@@ -17,14 +17,20 @@ class CircuitScene : public QGraphicsScene
 {
   Q_OBJECT
 public:
-  explicit CircuitScene(QWidget *parent = nullptr);
+  explicit CircuitScene(QObject *parent = nullptr);
   virtual ~CircuitScene();
   void addGate(BaseGate*);
   void addFrameLine(FrameLine*);
 
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+private slots:
+  void temporaryConnectDelete(BaseGate*);
+  void temporaryDisConnectDelete(BaseGate*);
+  void deleteItem(QGraphicsItem*);
+
 private:
+  
   GateFactory *m_gate_factory;
   QSet<BaseGate*> m_gate_group;
   QSet<FrameLine*> m_frame_line_group; 

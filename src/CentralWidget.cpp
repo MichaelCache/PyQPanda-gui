@@ -21,7 +21,7 @@ CentralWidget::~CentralWidget()
 void CentralWidget::createComponent()
 {
     m_circute_view = new QGraphicsView(this);
-    m_circuit_scence = new CircuitScene();
+    m_circuit_scence = new CircuitScene(this);
 
     m_circute_view->setScene(m_circuit_scence);
     m_circute_view->setCacheMode(QGraphicsView::CacheBackground);

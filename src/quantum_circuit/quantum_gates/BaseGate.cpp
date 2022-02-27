@@ -9,12 +9,13 @@
 
 GateFont BaseGate::m_gate_font;
 
-BaseGate::BaseGate(const QString &name, const QRectF &gate_rect, QObject *parent)
-    : QObject(parent),
+BaseGate::BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QObject *parent)
+    : QObject(),
       QGraphicsItem(),
       m_name(name.trimmed().toUpper()),
       m_gate_rect(gate_rect)
 {
+  setPos(pos);
   setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
   initPropertyMenu();
 }
@@ -38,22 +39,29 @@ void BaseGate::setDagger()
 
 void BaseGate::deleteSelf()
 {
-  scene()->removeItem(this);
-  delete this;
+  emit deleteGate(this);
 }
 
-void BaseGate::isInValidPos(bool valid, QPointF pos)
+void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
 {
+  QPointF this_scene_pos = scenePos();
+  qDebug() << QString("this pos: %1, %2").arg(this_scene_pos.x()).arg(this_scene_pos.y());
   if (valid)
   {
-    setPos(pos);
+    qDebug() << QString("scene pos: %1, %2").arg(scene_pos.x()).arg(scene_pos.y());
+    
+    QPointF rela_pos = scene_pos + this_scene_pos;
+    qDebug() << QString("scene pos map to item pos: %1, %2").arg(mapFromScene(scene_pos).x()).arg(mapFromScene(scene_pos).y());
+    
+    setPos(scene_pos);
     update();
     emit occupyPos(true);
+    m_in_valid = true;
   }
   else
   {
     emit occupyPos(false);
-    deleteSelf();
+    m_in_valid = false;
   }
 }
 
@@ -73,6 +81,7 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+
   emit showValidPos(m_gate_rect);
   QGraphicsItem::mouseMoveEvent(event);
 }
@@ -88,10 +97,14 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   setSelected(false);
   emit hideValidPos();
 
-  QRectF cur_rect(m_gate_rect);
-  cur_rect.moveTopLeft(scenePos());
-  qDebug() << QString("gatePos: %1:%2").arg(cur_rect.x()).arg(cur_rect.y());
-  emit checkValidPos(cur_rect);
+  QRectF cur_rect = mapRectToScene(m_gate_rect);
+  emit connectDelete(this);
+  emit checkValidPos(cur_rect, this);
+  emit disconnectDelete(this);
+  if (!m_in_valid)
+  {
+    emit deleteGate(this);
+  }
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

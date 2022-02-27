@@ -17,7 +17,7 @@ class BaseGate : public QObject, public QGraphicsItem
 {
   Q_OBJECT
 public:
-  explicit BaseGate(const QString &name, const QRectF &gate_rect, QObject *parent = nullptr);
+  explicit BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QObject *parent = nullptr);
   virtual ~BaseGate();
   QRectF boundingRect() const;
 
@@ -26,13 +26,16 @@ private slots:
   void deleteSelf();
 
 public slots:
-  void isInValidPos(bool, QPointF);
+  void isInValidPos(bool, QPointF scene_pos);
 
 signals:
   void showValidPos(QRectF);
   void hideValidPos();
-  void checkValidPos(QRectF);
+  void checkValidPos(QRectF scene_rect, BaseGate*);
   void occupyPos(bool);
+  void connectDelete(BaseGate*);
+  void disconnectDelete(BaseGate*);
+  void deleteGate(QGraphicsItem*);
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -51,6 +54,7 @@ private:
   QMenu m_property_menu;
   QString m_dagger{0x2020}; // unicode dagger
   bool m_is_dagger{false};
+  bool m_in_valid{false};
 };
 
 #endif // QUGATE_H
