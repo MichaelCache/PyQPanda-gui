@@ -4,15 +4,14 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 
-// GateRectF GateFactory::m_gate_rect(0, 0);
 GateFont GateFactory::m_gate_font;
 
 GateFactory::GateFactory(const QString &gate, qreal x, qreal y, QObject *parent)
-    : QObject(parent),
+    : QObject(),
       QGraphicsItem(),
-      m_gate_type(gate.trimmed().toUpper()),
-      m_gate_rect(x, y)
+      m_gate_type(gate.trimmed().toUpper())
 {
+  setPos(x, y);
   setFlags(QGraphicsItem::ItemIsSelectable);
   setAcceptHoverEvents(true);
 }
@@ -36,11 +35,13 @@ void GateFactory::paint(QPainter *painter,
 
 void GateFactory::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+  // drag action to create a new gate rectanguler block from gate factory rectanguler block to GraphicScene
   if (event->button() == Qt::LeftButton)
   {
-    BaseGate *gate = new BaseGate(m_gate_type, m_gate_rect);
-    scene()->addItem(gate);
+    BaseGate *gate = new BaseGate(m_gate_type, scenePos(), m_gate_rect);
+    static_cast<CircuitScene *>(scene())->addGate(gate);
     QGraphicsItem::mousePressEvent(event);
+    // gate get mouse fouce, gate factory lose mouse
     ungrabMouse();
     gate->grabMouse();
   }

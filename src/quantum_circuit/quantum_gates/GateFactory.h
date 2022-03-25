@@ -26,7 +26,7 @@ protected:
              QWidget *widget) override;
   void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
-  QString m_gate_type;
+  QString m_gate_type; // gate factory name or gate type factory name
   GateRectF m_gate_rect;
   static GateFont m_gate_font;
 };

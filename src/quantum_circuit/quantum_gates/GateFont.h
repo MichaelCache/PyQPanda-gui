@@ -10,6 +10,6 @@
 class GateFont : public QFont, public QColor
 {
 public:
-    explicit GateFont();
+    explicit GateFont(int font_size = 20, const QColor &color = Qt::white);
     virtual ~GateFont();
 };
