@@ -1,7 +1,7 @@
 #include <QGraphicsScene>
 #include <QDebug>
 
-#include "FrameLine.h"
+#include "CircuitLine.h"
 #include "BitFont.h"
 
 FrameLine::FrameLine(const QString &label, const QPointF &pos, QObject *parent)

@@ -9,7 +9,8 @@
 
 #include "quantum_gates/BaseGate.h"
 #include "quantum_gates/GateFactory.h"
-#include "frame_line/FrameLine.h"
+#include "circuit_line/CircuitLine.h"
+#include "Circuit.h"
 
 class GateFactory;
 
@@ -32,7 +33,8 @@ private slots:
 private:
   
   GateFactory *m_gate_factory;
-  QSet<BaseGate*> m_gate_group;
-  QSet<FrameLine*> m_frame_line_group; 
+  // QSet<BaseGate*> m_gate_group;
+  // QSet<FrameLine*> m_frame_line_group; 
+  Circuit* m_circ;
 };
 
