@@ -9,7 +9,7 @@
 
 GateFont BaseGate::m_gate_font;
 
-BaseGate::BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QObject *parent)
+BaseGate::BaseGate(const QString &name, const QPointF &pos, const QRectF &gate_rect, QObject *parent)
     : QObject(),
       QGraphicsItem(),
       m_name(name.trimmed().toUpper()),
@@ -28,7 +28,7 @@ void BaseGate::initPropertyMenu()
   QAction *del_gate = m_property_menu.addAction("Delete");
 
   QObject::connect(dagger, SIGNAL(triggered()), this, SLOT(setDagger()));
-  QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
+  // QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
 }
 
 void BaseGate::setDagger()
@@ -37,33 +37,33 @@ void BaseGate::setDagger()
   update();
 }
 
-void BaseGate::deleteSelf()
-{
-  emit deleteGate(this);
-}
+// void BaseGate::deleteSelf()
+// {
+//   emit deleteGate(this);
+// }
 
-void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
-{
-  QPointF this_scene_pos = scenePos();
-  qDebug() << QString("this pos: %1, %2").arg(this_scene_pos.x()).arg(this_scene_pos.y());
-  if (valid)
-  {
-    qDebug() << QString("scene pos: %1, %2").arg(scene_pos.x()).arg(scene_pos.y());
-    
-    QPointF rela_pos = scene_pos + this_scene_pos;
-    qDebug() << QString("scene pos map to item pos: %1, %2").arg(mapFromScene(scene_pos).x()).arg(mapFromScene(scene_pos).y());
-    
-    setPos(scene_pos);
-    update();
-    emit occupyPos(true);
-    m_in_valid = true;
-  }
-  else
-  {
-    emit occupyPos(false);
-    m_in_valid = false;
-  }
-}
+// void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
+// {
+//   QPointF this_scene_pos = scenePos();
+//   qDebug() << QString("this pos: %1, %2").arg(this_scene_pos.x()).arg(this_scene_pos.y());
+//   if (valid)
+//   {
+//     qDebug() << QString("scene pos: %1, %2").arg(scene_pos.x()).arg(scene_pos.y());
+
+//     QPointF rela_pos = scene_pos + this_scene_pos;
+//     qDebug() << QString("scene pos map to item pos: %1, %2").arg(mapFromScene(scene_pos).x()).arg(mapFromScene(scene_pos).y());
+
+//     setPos(scene_pos);
+//     update();
+//     emit occupyPos(true);
+//     m_in_valid = true;
+//   }
+//   else
+//   {
+//     emit occupyPos(false);
+//     m_in_valid = false;
+//   }
+// }
 
 QRectF BaseGate::boundingRect() const
 {
@@ -81,7 +81,7 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-
+  qDebug() << "move\n";
   emit showValidPos(m_gate_rect);
   QGraphicsItem::mouseMoveEvent(event);
 }
@@ -95,16 +95,16 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   QGraphicsItem::mouseReleaseEvent(event);
   ungrabMouse();
   setSelected(false);
-  emit hideValidPos();
+  // emit hideValidPos();
 
-  QRectF cur_rect = mapRectToScene(m_gate_rect);
-  emit connectDelete(this);
-  emit checkValidPos(cur_rect, this);
-  emit disconnectDelete(this);
-  if (!m_in_valid)
-  {
-    emit deleteGate(this);
-  }
+  // QRectF cur_rect = mapRectToScene(m_gate_rect);
+  // emit connectDelete(this);
+  // emit checkValidPos(cur_rect, this);
+  // emit disconnectDelete(this);
+  // if (!m_in_valid)
+  // {
+  //   emit deleteGate(this);
+  // }
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

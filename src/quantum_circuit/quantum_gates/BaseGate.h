@@ -23,19 +23,19 @@ public:
 
 private slots:
   void setDagger();
-  void deleteSelf();
+  // void deleteSelf();
 
 public slots:
-  void isInValidPos(bool, QPointF scene_pos);
+  // void isInValidPos(bool, QPointF scene_pos);
 
 signals:
   void showValidPos(QRectF);
-  void hideValidPos();
-  void checkValidPos(QRectF scene_rect, BaseGate*);
-  void occupyPos(bool);
-  void connectDelete(BaseGate*);
-  void disconnectDelete(BaseGate*);
-  void deleteGate(QGraphicsItem*);
+  // void hideValidPos();
+  // void checkValidPos(QRectF scene_rect, BaseGate*);
+  // void occupyPos(bool);
+  // void connectDelete(BaseGate*);
+  // void disconnectDelete(BaseGate*);
+  // void deleteGate(QGraphicsItem*);
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
