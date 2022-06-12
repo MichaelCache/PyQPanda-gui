@@ -49,15 +49,12 @@ CircuitLine::~CircuitLine()
 {
 }
 
-void CircuitLine::showValidPos(QRectF rect)
+void CircuitLine::showValidPos(const QRectF& rect)
 {
-  if (distance(rect.center(), pos()) < m_step)
-  {
-    m_virtual_gate->setRect(0, 0, rect.width(), rect.height());
-    m_virtual_gate->setPos(m_valid_pos.x(), m_valid_pos.y() - rect.height() / 2);
-    m_virtual_gate->setVisible(true);
-    update();
-  }
+  m_virtual_gate->setRect(0, 0, rect.width(), rect.height());
+  m_virtual_gate->setPos(m_valid_pos.x(), m_valid_pos.y() - rect.height() / 2);
+  m_virtual_gate->setVisible(true);
+  update();
 }
 
 void CircuitLine::hideValidPos()

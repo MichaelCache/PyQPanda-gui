@@ -6,12 +6,12 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QMenu>
+#include "../Circuit.h"
 
 GateFont BaseGate::m_gate_font;
 
-BaseGate::BaseGate(const QString &name, const QPointF &pos, const QRectF &gate_rect, QObject *parent)
-    : QObject(),
-      QGraphicsItem(),
+BaseGate::BaseGate(const QString &name, const QPointF &pos, const QRectF &gate_rect, QGraphicsItem *parent)
+    : QGraphicsObject(parent),
       m_name(name.trimmed().toUpper()),
       m_gate_rect(gate_rect)
 {
@@ -28,7 +28,7 @@ void BaseGate::initPropertyMenu()
   QAction *del_gate = m_property_menu.addAction("Delete");
 
   QObject::connect(dagger, SIGNAL(triggered()), this, SLOT(setDagger()));
-  // QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
+  QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
 }
 
 void BaseGate::setDagger()
@@ -37,10 +37,10 @@ void BaseGate::setDagger()
   update();
 }
 
-// void BaseGate::deleteSelf()
-// {
-//   emit deleteGate(this);
-// }
+void BaseGate::deleteSelf()
+{
+  emit deleteGate(this);
+}
 
 // void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
 // {
@@ -81,8 +81,7 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-  qDebug() << "move\n";
-  emit showValidPos(m_gate_rect);
+  emit showValidPos(this);
   QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -95,7 +94,7 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   QGraphicsItem::mouseReleaseEvent(event);
   ungrabMouse();
   setSelected(false);
-  // emit hideValidPos();
+  emit hideValidPos();
 
   // QRectF cur_rect = mapRectToScene(m_gate_rect);
   // emit connectDelete(this);
@@ -105,6 +104,10 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   // {
   //   emit deleteGate(this);
   // }
+}
+
+const GateRectF& BaseGate::gateBox() const{
+  return m_gate_rect;
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)

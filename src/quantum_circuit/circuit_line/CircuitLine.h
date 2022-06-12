@@ -15,12 +15,15 @@ public:
     explicit CircuitLine(const QString &label, const QPointF &pos, QObject *parent = nullptr);
     virtual ~CircuitLine();
 
+    void showValidPos(const QRectF& rect);
+    void hideValidPos();
+
 signals:
     void isInValidPos(bool, QPointF scene_pos);
 
 public slots:
-    void showValidPos(QRectF rect);
-    void hideValidPos();
+    
+    
     void checkValidPos(QRectF scene_rect, BaseGate *);
     void occupyPos(bool);
 

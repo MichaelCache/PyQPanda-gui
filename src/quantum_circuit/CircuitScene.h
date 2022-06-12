@@ -21,8 +21,8 @@ public:
   explicit CircuitScene(QObject *parent = nullptr);
   virtual ~CircuitScene();
   void addGate(BaseGate *);
-  // void addFrameLine(CircuitLine *);
 
+  // to show mose coord
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 private slots:

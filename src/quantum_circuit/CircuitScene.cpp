@@ -1,6 +1,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QDebug>
+#include <memory>
 
 #include "CircuitScene.h"
 #include "../logger/Logger.h"
@@ -19,7 +20,6 @@ CircuitScene::~CircuitScene() {}
 
 void CircuitScene::addGate(BaseGate *gate)
 {
-  // addItem(gate);
   m_circ->addGate(gate);
 }
 

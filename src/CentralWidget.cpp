@@ -25,7 +25,6 @@ void CentralWidget::createComponent()
 
     m_circute_view->setScene(m_circuit_scence);
     m_circute_view->setCacheMode(QGraphicsView::CacheBackground);
-    // m_circute_view->setStyleSheet("padding: 0px; border: 0px;");
 
     // redirect qdebug to SingletonLogger
     qInstallMessageHandler(redirectMessageHandle);
