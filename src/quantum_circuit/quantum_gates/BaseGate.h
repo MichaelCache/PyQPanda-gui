@@ -10,6 +10,7 @@
 
 #include "GateFont.h"
 #include "GateRectF.h"
+#include "../circuit_ir/CircuitIR.h"
 
 /**
  * @brief represent circuit gate
@@ -22,6 +23,7 @@ public:
   virtual ~BaseGate();
   QRectF boundingRect() const;
   const GateRectF& gateBox() const;
+  std::shared_ptr<CircuitIR> circ() const;
 
 private slots:
   void setDagger();
@@ -33,7 +35,7 @@ public slots:
 signals:
   void showValidPos(BaseGate*);
   void hideValidPos();
-  // void checkValidPos(QRectF scene_rect, BaseGate*);
+  void checkValidPos(BaseGate*);
   // void occupyPos(bool);
   // void connectDelete(BaseGate*);
   // void disconnectDelete(BaseGate*);
@@ -57,6 +59,7 @@ private:
   QString m_dagger{0x2020}; // unicode dagger
   bool m_is_dagger{false};
   bool m_in_valid{false};
+  std::shared_ptr<CircuitIR> m_circ;
 };
 
 #endif // QUGATE_H

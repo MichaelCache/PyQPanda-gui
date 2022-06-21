@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "CircuitScene.h"
-#include "../logger/Logger.h"
 #include "Circuit.h"
 
 CircuitScene::CircuitScene(QObject *parent)
@@ -20,7 +19,7 @@ CircuitScene::~CircuitScene() {}
 
 void CircuitScene::addGate(BaseGate *gate)
 {
-  m_circ->addGate(gate);
+  m_circ->tryAddGate(gate);
 }
 
 // void CircuitScene::deleteItem(QGraphicsItem *it)
@@ -56,7 +55,7 @@ void CircuitScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton)
   {
-    SingletonLogger::instance()->append(QString("Mouse at %1:%2").arg(event->scenePos().x()).arg(event->scenePos().y()));
+    qDebug() << "Mouse at " << event->scenePos().x() << ":" << event->scenePos().y();
   }
   QGraphicsScene::mousePressEvent(event);
 }

@@ -1,16 +1,17 @@
 #include "Circuit.h"
 #include <QGraphicsScene>
 #include <QDebug>
+#include <cfloat>
 
-Circuit::Circuit(const QPointF &pos, QObject *parent)
-    : QObject(parent),
-      QGraphicsItem(),
-      m_circ("root", 0, m_init_lines - 1)
+Circuit::Circuit(const QPointF &pos, QGraphicsItem *parent)
+    : QGraphicsObject(parent),
+      m_circ("root", m_init_lines),
+      m_nearest_line_idx(-1)
 {
   QGraphicsItem::setPos(pos);
   for (size_t i = 0; i < m_init_lines; i++)
   {
-    pushCircLine();
+    pushCircLine(i);
   }
 }
 
@@ -23,19 +24,18 @@ void Circuit::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, Q
 {
 }
 
-void Circuit::pushCircLine()
+void Circuit::pushCircLine(uint64_t row_num)
 {
-  if (m_circ_lines.empty())
+  QPointF pos{0, 0};
+  if (!m_circ_lines.isEmpty())
   {
-    m_circ_lines.push_back(new CircuitLine("q_0", {0, 0}, this));
+    pos = m_circ_lines.back()->pos() + QPointF(0, m_circline_interval);
   }
-  else
-  {
-    auto pos = m_circ_lines.back()->pos() + QPointF(0, m_circline_interval);
-    QString line_name = QString("q_%1").arg(m_circ_lines.size());
-    m_circ_lines.push_back(new CircuitLine(line_name, pos, this));
-  }
+
+  m_circ_lines.push_back(new CircuitLine("q", row_num, pos, this));
   m_circ_lines.back()->setParentItem(this);
+  connect(m_circ_lines.back(), SIGNAL(isInValidPos(BaseGate *, uint64_t, uint64_t)), this, SLOT(addGate(BaseGate *, uint64_t, uint64_t)));
+  connect(m_circ_lines.back(), SIGNAL(notInValidPos(BaseGate *)), this, SLOT(deleteGate(BaseGate *)));
 }
 
 void Circuit::popCircLine()
@@ -47,11 +47,16 @@ void Circuit::popCircLine()
   }
 }
 
-void Circuit::addGate(BaseGate *gate)
+void Circuit::tryAddGate(BaseGate *gate)
 {
   gate->setParentItem(this);
   connectGate(gate);
+}
+
+void Circuit::addGate(BaseGate *gate, uint64_t row, uint64_t col)
+{
   m_gates.insert(gate);
+  m_circ.insert(gate->circ(), row, col);
 }
 
 void Circuit::deleteGate(BaseGate *gate)
@@ -59,9 +64,10 @@ void Circuit::deleteGate(BaseGate *gate)
   auto it = m_gates.find(gate);
   if (it != m_gates.end())
   {
-    this->scene()->removeItem(gate);
     m_gates.erase(it);
   }
+  m_circ.deleteGate(gate->circ());
+  this->scene()->removeItem(gate);
 }
 
 void Circuit::showValidGatePosBox(BaseGate *gate)
@@ -87,10 +93,12 @@ void Circuit::showValidGatePosBox(BaseGate *gate)
     if (i == min_idx)
     {
       m_circ_lines.at(i)->showValidPos(gate->gateBox());
+      m_nearest_line_idx = i;
     }
     else
     {
       m_circ_lines.at(i)->hideValidPos();
+      m_nearest_line_idx = i;
     }
   }
 }
@@ -103,16 +111,17 @@ void Circuit::hideValidGatePosBox()
   }
 }
 
+void Circuit::checkValidPos(BaseGate *gate)
+{
+  auto neaerst_line = m_circ_lines.at(m_nearest_line_idx);
+  neaerst_line->checkValidPos(gate);
+}
+
 void Circuit::connectGate(BaseGate *gate)
 {
-  for (auto circ_line : m_circ_lines)
-  {
-    connect(gate, SIGNAL(showValidPos(BaseGate *)), this, SLOT(showValidGatePosBox(BaseGate *)));
-    connect(gate, SIGNAL(hideValidPos()), this, SLOT(hideValidGatePosBox()));
-    // connect(gate, SIGNAL(occupyPos(bool)), frame_line, SLOT(occupyPos(bool)));
-  }
-  // connect(gate, SIGNAL(connectDelete(BaseGate *)), this, SLOT(temporaryConnectDelete(BaseGate *)));
-  // connect(gate, SIGNAL(disconnectDelete(BaseGate *)), this, SLOT(temporaryDisConnectDelete(BaseGate *)));
+  connect(gate, SIGNAL(showValidPos(BaseGate *)), this, SLOT(showValidGatePosBox(BaseGate *)));
+  connect(gate, SIGNAL(hideValidPos()), this, SLOT(hideValidGatePosBox()));
+  connect(gate, SIGNAL(checkValidPos(BaseGate *)), this, SLOT(checkValidPos(BaseGate *)));
   connect(gate, SIGNAL(deleteGate(BaseGate *)), this, SLOT(deleteGate(BaseGate *)));
 }
 

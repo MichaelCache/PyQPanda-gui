@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QTextEdit>
 
 #include "quantum_circuit/CircuitScene.h"
 
@@ -15,7 +16,8 @@ public:
 private:
     void createComponent();
     void initLayout();
-    
+
     QGraphicsView *m_circute_view;
     CircuitScene *m_circuit_scence;
+    QTextEdit * m_logger;
 };
