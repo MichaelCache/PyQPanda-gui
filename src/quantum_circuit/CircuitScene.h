@@ -8,8 +8,9 @@
 #include <QRectF>
 
 #include "quantum_gates/BaseGate.h"
-#include "quantum_gates/GateFactory.h"
-#include "frame_line/FrameLine.h"
+#include "circuit_line/CircuitLine.h"
+#include "GateFactory.h"
+#include "Circuit.h"
 
 class GateFactory;
 
@@ -19,20 +20,17 @@ class CircuitScene : public QGraphicsScene
 public:
   explicit CircuitScene(QObject *parent = nullptr);
   virtual ~CircuitScene();
-  void addGate(BaseGate*);
-  void addFrameLine(FrameLine*);
+  void addGate(BaseGate *);
 
+  // to show mose coord
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 private slots:
-  void temporaryConnectDelete(BaseGate*);
-  void temporaryDisConnectDelete(BaseGate*);
-  void deleteItem(QGraphicsItem*);
+  // void temporaryConnectDelete(BaseGate *);
+  // void temporaryDisConnectDelete(BaseGate *);
+  // void deleteItem(QGraphicsItem *);
 
 private:
-  
   GateFactory *m_gate_factory;
-  QSet<BaseGate*> m_gate_group;
-  QSet<FrameLine*> m_frame_line_group; 
+  Circuit *m_circ;
 };
-

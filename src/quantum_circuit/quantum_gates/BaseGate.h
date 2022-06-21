@@ -6,36 +6,40 @@
 #include <QObject>
 #include <QWidget>
 #include <QMenu>
+#include <QGraphicsObject>
 
 #include "GateFont.h"
 #include "GateRectF.h"
+#include "../circuit_ir/CircuitIR.h"
 
 /**
  * @brief represent circuit gate
  */
-class BaseGate : public QObject, public QGraphicsItem
+class BaseGate : public QGraphicsObject
 {
   Q_OBJECT
 public:
-  explicit BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QObject *parent = nullptr);
+  explicit BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QGraphicsItem *parent = nullptr);
   virtual ~BaseGate();
   QRectF boundingRect() const;
+  const GateRectF& gateBox() const;
+  std::shared_ptr<CircuitIR> circ() const;
 
 private slots:
   void setDagger();
   void deleteSelf();
 
 public slots:
-  void isInValidPos(bool, QPointF scene_pos);
+  // void isInValidPos(bool, QPointF scene_pos);
 
 signals:
-  void showValidPos(QRectF);
+  void showValidPos(BaseGate*);
   void hideValidPos();
-  void checkValidPos(QRectF scene_rect, BaseGate*);
-  void occupyPos(bool);
-  void connectDelete(BaseGate*);
-  void disconnectDelete(BaseGate*);
-  void deleteGate(QGraphicsItem*);
+  void checkValidPos(BaseGate*);
+  // void occupyPos(bool);
+  // void connectDelete(BaseGate*);
+  // void disconnectDelete(BaseGate*);
+  void deleteGate(BaseGate*);
 
 protected:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -55,6 +59,7 @@ private:
   QString m_dagger{0x2020}; // unicode dagger
   bool m_is_dagger{false};
   bool m_in_valid{false};
+  std::shared_ptr<CircuitIR> m_circ;
 };
 
 #endif // QUGATE_H

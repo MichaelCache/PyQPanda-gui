@@ -38,11 +38,16 @@ void GateFactory::mousePressEvent(QGraphicsSceneMouseEvent *event)
   // drag action to create a new gate rectanguler block from gate factory rectanguler block to GraphicScene
   if (event->button() == Qt::LeftButton)
   {
+
     BaseGate *gate = new BaseGate(m_gate_type, scenePos(), m_gate_rect);
-    static_cast<CircuitScene *>(scene())->addGate(gate);
-    QGraphicsItem::mousePressEvent(event);
-    // gate get mouse fouce, gate factory lose mouse
-    ungrabMouse();
-    gate->grabMouse();
+    auto scene = dynamic_cast<CircuitScene *>(this->scene());
+    if (scene)
+    {
+      // gate get mouse fouce, gate factory lose mouse
+      scene->addGate(gate);
+      ungrabMouse();
+      gate->grabMouse();
+    }
   }
+  QGraphicsItem::mousePressEvent(event);
 }

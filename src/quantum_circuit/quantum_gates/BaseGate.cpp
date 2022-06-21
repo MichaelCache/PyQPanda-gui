@@ -6,29 +6,38 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QMenu>
+#include "../Circuit.h"
 
 GateFont BaseGate::m_gate_font;
 
-BaseGate::BaseGate(const QString &name, const QPointF& pos, const QRectF &gate_rect, QObject *parent)
-    : QObject(),
-      QGraphicsItem(),
+BaseGate::BaseGate(const QString &name, const QPointF &pos, const QRectF &gate_rect, QGraphicsItem *parent)
+    : QGraphicsObject(parent),
       m_name(name.trimmed().toUpper()),
-      m_gate_rect(gate_rect)
+      m_gate_rect(gate_rect),
+      m_circ(new CircuitIR(m_name.toStdString(), 1))
 {
   setPos(pos);
   setFlags(QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsMovable);
   initPropertyMenu();
 }
 
-BaseGate::~BaseGate() {}
+BaseGate::~BaseGate() {
+  qDebug()<<"Gate deconstruct "<<(void*)this;
+}
 
-void BaseGate::initPropertyMenu()
+QRectF BaseGate::boundingRect() const
 {
-  QAction *dagger = m_property_menu.addAction("Dagger");
-  QAction *del_gate = m_property_menu.addAction("Delete");
+  return m_gate_rect;
+}
 
-  QObject::connect(dagger, SIGNAL(triggered()), this, SLOT(setDagger()));
-  QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
+const GateRectF &BaseGate::gateBox() const
+{
+  return m_gate_rect;
+}
+
+std::shared_ptr<CircuitIR> BaseGate::circ() const
+{
+  return m_circ;
 }
 
 void BaseGate::setDagger()
@@ -42,34 +51,6 @@ void BaseGate::deleteSelf()
   emit deleteGate(this);
 }
 
-void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
-{
-  QPointF this_scene_pos = scenePos();
-  qDebug() << QString("this pos: %1, %2").arg(this_scene_pos.x()).arg(this_scene_pos.y());
-  if (valid)
-  {
-    qDebug() << QString("scene pos: %1, %2").arg(scene_pos.x()).arg(scene_pos.y());
-    
-    QPointF rela_pos = scene_pos + this_scene_pos;
-    qDebug() << QString("scene pos map to item pos: %1, %2").arg(mapFromScene(scene_pos).x()).arg(mapFromScene(scene_pos).y());
-    
-    setPos(scene_pos);
-    update();
-    emit occupyPos(true);
-    m_in_valid = true;
-  }
-  else
-  {
-    emit occupyPos(false);
-    m_in_valid = false;
-  }
-}
-
-QRectF BaseGate::boundingRect() const
-{
-  return m_gate_rect;
-}
-
 void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                      QWidget *widget)
 {
@@ -81,8 +62,7 @@ void BaseGate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void BaseGate::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-
-  emit showValidPos(m_gate_rect);
+  emit showValidPos(this);
   QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -98,16 +78,48 @@ void BaseGate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
   emit hideValidPos();
 
   QRectF cur_rect = mapRectToScene(m_gate_rect);
-  emit connectDelete(this);
-  emit checkValidPos(cur_rect, this);
-  emit disconnectDelete(this);
-  if (!m_in_valid)
-  {
-    emit deleteGate(this);
-  }
+  // emit connectDelete(this);
+  emit checkValidPos(this);
+  // emit disconnectDelete(this);
+  // if (!m_in_valid)
+  // {
+  //   emit deleteGate(this);
+  // }
 }
 
 void BaseGate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
   QAction *selectedAction = m_property_menu.exec(event->screenPos());
 }
+
+void BaseGate::initPropertyMenu()
+{
+  QAction *dagger = m_property_menu.addAction("Dagger");
+  QAction *del_gate = m_property_menu.addAction("Delete");
+
+  QObject::connect(dagger, SIGNAL(triggered()), this, SLOT(setDagger()));
+  QObject::connect(del_gate, SIGNAL(triggered()), this, SLOT(deleteSelf()));
+}
+
+// void BaseGate::isInValidPos(bool valid, QPointF scene_pos)
+// {
+//   QPointF this_scene_pos = scenePos();
+//   qDebug() << QString("this pos: %1, %2").arg(this_scene_pos.x()).arg(this_scene_pos.y());
+//   if (valid)
+//   {
+//     qDebug() << QString("scene pos: %1, %2").arg(scene_pos.x()).arg(scene_pos.y());
+
+//     QPointF rela_pos = scene_pos + this_scene_pos;
+//     qDebug() << QString("scene pos map to item pos: %1, %2").arg(mapFromScene(scene_pos).x()).arg(mapFromScene(scene_pos).y());
+
+//     setPos(scene_pos);
+//     update();
+//     emit occupyPos(true);
+//     m_in_valid = true;
+//   }
+//   else
+//   {
+//     emit occupyPos(false);
+//     m_in_valid = false;
+//   }
+// }
